@@ -3,6 +3,7 @@
 
 # Import
 import random
+import os
 
 # Board (tabuleiro)
 board = ['''
@@ -76,19 +77,31 @@ class Hangman:
 		self.tentativas=0
 		self.letras_certas=[]
 		self.letras_erradas=[]
-		print("@iniciado com sucesso@")
+		self.palavraResposta=[]
+		print("..:: BEM VINDO AO JOGO DA FORCA ::..\n")
 		
 		
 	# Método para adivinhar a letra
 	def guess(self, letter):
 		self.letter=letter
+		
+
+
 		if (self.letter) in self.word:
-			ind=self.word.index(self.letter)
-			self.letras_certas.append(self.letter + " ")
-			self.palavraSecreta[ind]=self.letter
+			self.letras_certas.append(self.letter)
+			for y in range(len(self.word)):
+				if (self.letter==self.word[y]):
+					self.palavraSecreta[y]=self.letter					
+			
 		else:
-			self.tentativas+=1
-			self.letras_erradas.append((self.letter + " "))
+			self.letras_erradas.append((self.letter))
+			if self.tentativas <6:
+				self.tentativas+=1
+			else:
+				self.tentativas=6
+		
+		self.palavraResposta=("".join(self.palavraSecreta))
+		
 			
 		
 		
@@ -97,14 +110,17 @@ class Hangman:
 		if self.tentativas>=6:
 			acabou_jogo=False
 			return acabou_jogo
-		elif (self.palavraSecreta==self.word):
+		elif (self.palavraResposta==self.word):
 			acabou_jogo=False
 			return acabou_jogo
+		else:
+			return True
 		
 	# Método para verificar se o jogador venceu
 	def hangman_won(self):
-		return True if (self.palavraSecreta==self.word) else False
+		return True if (self.palavraResposta==self.word) else False
 	
+
 
 	# Método para não mostrar a letra no board
 	def hide_word(self):
@@ -120,9 +136,9 @@ class Hangman:
 	def print_game_status(self):
 		print(board[self.tentativas])
 		print("\n " + ' '.join(self.palavraSecreta))
-		print("\n Letras corretas: ", self.letras_certas)
-		print("\n Palavras erradas:  ", self.letras_erradas)
-		
+		print("\n Letras corretas: ", " ".join(self.letras_certas))
+		print("\n Palavras erradas:  ", " ".join(self.letras_erradas))
+			
 
 
 		
@@ -149,7 +165,16 @@ def main():
 		game.print_game_status()
 
 		letra_in = input("\n Escolha uma letra:  ")
-		game.guess(letra_in)
+		if (letra_in in game.letras_certas or letra_in in game.letras_erradas):
+
+			print(" Erro: Letra ja escolhida")
+			input ("Pressione qualquer tecla para continuar...")
+			
+		else:
+			game.guess(letra_in)
+			acabou_jogo= game.hangman_over()
+		
+		os.system('cls' if os.name== 'nt' else 'clear')
 
 
 	# Verifica o status do jogo
