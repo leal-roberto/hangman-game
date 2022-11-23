@@ -8,7 +8,7 @@ import os
 # Board (tabuleiro)
 board = ['''
 
->>>>>>>>>>Hangman<<<<<<<<<<
+>>>>>>>>>>FORCA<<<<<<<<<
 
 +---+
 |   |
@@ -83,7 +83,7 @@ class Hangman:
 		
 	# Método para adivinhar a letra
 	def guess(self, letter):
-		self.letter=letter
+		self.letter=letter.lower()
 		
 
 
@@ -185,13 +185,11 @@ def main():
 		print ('\nParabéns! Você venceu!!')
 
 	else:
-	 	print("\nGame over! Você perdeu.")
-		#print("A palavra era " + game.word)
-	
+	 	print("\nGame over! Você perdeu.\n A palavra era:  " + game.word)	
 		
 	print ('\nFoi bom jogar com você! Agora vá estudar!\n')
 
-# Executa o programa		
+# Executa o programa
 if __name__ == "__main__":
 	main()
 
